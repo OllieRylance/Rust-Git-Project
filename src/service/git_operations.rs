@@ -1,7 +1,30 @@
 // Initialization (git init)
 
-pub fn init_repo() {
-    // Function to initialize a new repository
+///
+///
+/// # Arguments
+///
+/// * `path`: &str - The path to the directory where the repository will be initialized
+///
+/// returns: Result<(), String>
+///
+/// # Examples
+///
+/// ```
+///
+/// ```
+// Function to initialize a new repository
+pub fn init_repository(path: &str) -> Result<(), String> {
+    // Check if directory exists
+    if std::path::Path::new(path).exists() {
+        return Err(format!("Directory {} already exists.", path));
+    }
+
+    // Create the .git directory structure
+    match super::super::data_access::repository::create_git_directory(path) {
+        Ok(_) => Ok(()),
+        Err(e) => Err(format!("Failed to initialize repository: {}", e)),
+    }
 }
 
 // Staging (git add)
