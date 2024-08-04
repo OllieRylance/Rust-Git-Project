@@ -4,7 +4,7 @@
 
 This is a project that I have taken on to grow my knowledge of Software Development massively.
 
-What makes this project impressive, in my opinion, is that I am programming in a new language (**Rust**) on a new IDE (**CLion** with Rust Plugin), I am using new documentation software (**Markdown** on **Obsidian**), new project management software (**Jira**), and I am creating something that my current understand of is minimal (**Git**).
+What makes this project impressive, in my opinion, is that I am programming in a new language (**Rust**) on a new IDE (**CLion** with Rust Plugin) with a new build system (**Cargo**), I am using new documentation software (**Markdown** on **Obsidian**), new project management software (**Jira**), and I am creating something that my current understand of is minimal (**Git**).
 
 Through overcoming the challenges of all of these **new tools and technologies**, I aim to be an even more versatile programmer with a greater skill set.
 
