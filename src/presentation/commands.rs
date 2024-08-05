@@ -19,8 +19,10 @@ pub fn handle_command(command: &str, _args: &[&str]) {
         }
         "init" => {
             // Initialize repository
-            println!("Initialize repository");
-            git_operations::init_repo();
+            match git_operations::init_repository("C:\\Users\\ollie\\Documents\\test") {
+                Ok(_) => println!("Repository initialized successfully."),
+                Err(e) => println!("Failed to initialize repository: {}", e),
+            }
         }
         "add" => {
             // Add file to staging area

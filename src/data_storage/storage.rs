@@ -1,7 +1,28 @@
+use std::fs;
+use std::path::Path;
+
 // Initialization (git init)
 
-pub fn create_directories() {
-    // Function to create directories on the filesystem
+pub fn directory_exists(path: &str) -> Result<bool, String> {
+    let git_dir = format!("{}/.git", path);
+    Ok(Path::new(&git_dir).exists())
+}
+
+pub fn create_directories(path: &str) -> Result<(), String> {
+    let git_dir = format!("{}/.git", path);
+    if let Err(e) = fs::create_dir_all(&git_dir) {
+        return Err(format!("Failed to create directories: {}", e));
+    }
+    Ok(())
+}
+
+pub fn initialize_config(path: &str) -> Result<(), String> {
+    let git_dir = format!("{}/.git", path);
+    let head_path = format!("{}/HEAD", git_dir);
+    if let Err(e) = fs::write(&head_path, "ref: refs/heads/master\n") {
+        return Err(format!("Failed to write HEAD file: {}", e));
+    }
+    Ok(())
 }
 
 // Staging (git add)

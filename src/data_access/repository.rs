@@ -1,7 +1,15 @@
+use crate::data_storage::storage;
+
 // Initialization (git init)
 
-pub fn create_repo_structure() {
-    // Function to create the necessary directory structure for a repository
+pub fn repo_exists(path: &str) -> Result<bool, String> {
+    storage::directory_exists(path)
+}
+
+pub fn create_repo_structure(path: &str) -> Result<(), String> {
+    storage::create_directories(path)?;
+    storage::initialize_config(path)?;
+    Ok(())
 }
 
 // Staging (git add)
