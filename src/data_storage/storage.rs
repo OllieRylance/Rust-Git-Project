@@ -1,72 +1,50 @@
-use std::fs;
+use std::fs::{self, File};
+use std::io::{Read, Write};
 use std::path::Path;
 
-// Initialization (git init)
+pub struct Storage;
 
-pub fn directory_exists(path: &str) -> Result<bool, String> {
-    let git_dir = format!("{}/.git", path);
-    Ok(Path::new(&git_dir).exists())
-}
-
-pub fn create_directories(path: &str) -> Result<(), String> {
-    let git_dir = format!("{}/.git", path);
-    if let Err(e) = fs::create_dir_all(&git_dir) {
-        return Err(format!("Failed to create directories: {}", e));
+impl Storage {
+    pub fn new() -> Self {
+        Storage
     }
-    Ok(())
 }
 
-pub fn initialize_config(path: &str) -> Result<(), String> {
-    let git_dir = format!("{}/.git", path);
-    let head_path = format!("{}/HEAD", git_dir);
-    if let Err(e) = fs::write(&head_path, "ref: refs/heads/master\n") {
-        return Err(format!("Failed to write HEAD file: {}", e));
+pub trait StorageTrait {
+    fn file_or_directory_exists(&self, file_path: &str) -> Result<bool, String>;
+    fn create_file(&self, file_path: &str) -> Result<(), String>;
+    fn create_directory(&self, dir_path: &str) -> Result<(), String>;
+    fn read_file(&self, file_path: &str) -> Result<String, String>;
+    fn overwrite_file(&self, file_path: &str, content: &str) -> Result<(), String>;
+    fn delete_file(&self, file_path: &str) -> Result<(), String>;
+}
+
+impl StorageTrait for Storage {
+    fn file_or_directory_exists(&self, file_or_directory_path: &str) -> Result<bool, String> {
+        Ok(Path::new(file_or_directory_path).exists())
     }
-    Ok(())
-}
 
-// Staging (git add)
+    fn create_file(&self, file_path: &str) -> Result<(), String> {
+        File::create(file_path).map(|_| ()).map_err(|e| e.to_string())
+    }
 
-pub fn write_to_stage_area(file_path: &str) {
-    // Function to write staged file data to the filesystem
-}
+    fn create_directory(&self, dir_path: &str) -> Result<(), String> {
+        fs::create_dir_all(dir_path).map_err(|e| e.to_string())
+    }
 
-// Committing (git commit)
+    fn read_file(&self, file_path: &str) -> Result<String, String> {
+        let mut file = File::open(file_path).map_err(|e| e.to_string())?;
+        let mut content = String::new();
+        file.read_to_string(&mut content).map_err(|e| e.to_string())?;
+        Ok(content)
+    }
 
-pub fn write_commit(commit_data: &str) {
-    // Function to write the commit object to the filesystem
-}
+    fn overwrite_file(&self, file_path: &str, content: &str) -> Result<(), String> {
+        let mut file = File::create(file_path).map_err(|e| e.to_string())?;
+        file.write_all(content.as_bytes()).map_err(|e| e.to_string())
+    }
 
-// Branching (git branch, git checkout)
-
-pub fn write_branch(branch_name: &str) {
-    // Function to write branch information to the filesystem
-}
-
-pub fn switch_to_branch(branch_name: &str) {
-    // Function to switch to a different branch
-}
-
-// Merging (git merge)
-
-pub fn write_merge_result() {
-    // Function to write the merge result to the filesystem
-}
-
-// Logging (git log)
-
-pub fn read_commit_history() {
-    // Function to read commit history from the filesystem
-}
-
-// Status Check (git status)
-
-pub fn read_status() {
-    // Function to read the status of files from the filesystem
-}
-
-// Diff (git diff)
-
-pub fn read_diff_data() {
-    // Function to read data necessary for computing diffs from the filesystem
+    fn delete_file(&self, file_path: &str) -> Result<(), String> {
+        fs::remove_file(file_path).map_err(|e| e.to_string())
+    }
 }

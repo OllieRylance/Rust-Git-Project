@@ -7,6 +7,7 @@ mod data_access;
 mod data_storage;
 mod infrastructure;
 mod tests;
+mod dto;
 
 fn main() {
     // Entry point of the application
